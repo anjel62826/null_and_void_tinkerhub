@@ -1,0 +1,103 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
+
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 90%;
+    max-width: 700px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #aaa;
+    margin-bottom: 30px;
+}
+
+.captcha-box {
+    background: #222;
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid #444;
+}
+
+#challenge {
+    margin-bottom: 25px;
+    font-size: 24px;
+}
+
+.options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.option {
+    background: #333;
+    border: 2px solid #555;
+    padding: 25px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 45px;
+
+    transition: 0.2s;
+}
+
+.option:hover {
+    transform: scale(1.05);
+    border-color: white;
+}
+
+.option.selected {
+    border-color: yellow;
+    background: #444;
+}
+
+#verifyButton {
+    padding: 15px 30px;
+
+    background: white;
+    color: black;
+
+    border: none;
+    border-radius: 8px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+#verifyButton:hover {
+    transform: scale(1.05);
+}
+
+#message {
+    margin-top: 20px;
+    font-size: 20px;
+    min-height: 30px;
+}
+
+.attempt {
+    margin-top: 20px;
+    color: #888;
+}
