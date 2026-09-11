@@ -126,3 +126,12 @@ if (attempt < 5) {
 }
 
 Click the happiest potato.
+Click the bus that looks like it missed its stop.
+Select the chair that has the most emotional damage.
+Choose the printer that owes you money.
+Select the potato that your mother would trust.
+Click the bus that knows what you did last summer.
+Select the chair that has seen your browser history.
+Type the sound of a disappointed calculator.
+Identify which potato has been paying taxes.
+Prove that you are not secretly a potato.
