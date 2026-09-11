@@ -101,3 +101,101 @@ h1 {
     margin-top: 20px;
     color: #888;
 }
+
+/* ==========================================
+   CAPTCHA FROM HELL - EXTRA LEVEL STYLES
+   ========================================== */
+
+
+/* LEVEL 6 - MOVING BUS */
+
+.moving-bus {
+    font-size: 70px;
+    cursor: pointer;
+
+    position: relative;
+
+    animation: busMove 3s infinite alternate ease-in-out;
+}
+
+@keyframes busMove {
+
+    0% {
+        left: -150px;
+    }
+
+    100% {
+        left: 150px;
+    }
+
+}
+
+
+/* LEVEL 7 - SCAN */
+
+.scan-box {
+
+    padding: 30px;
+
+    border: 2px dashed #777;
+
+    border-radius: 10px;
+
+    font-size: 22px;
+
+}
+
+
+/* LEVEL 8 - POTATO */
+
+.big-potato {
+
+    font-size: 100px;
+
+    cursor: pointer;
+
+    transition: transform 0.2s;
+
+}
+
+.big-potato:hover {
+
+    transform: scale(1.2);
+
+}
+
+
+/* LEVEL 9 - INPUT */
+
+.captcha-input {
+
+    width: 80%;
+
+    padding: 15px;
+
+    font-size: 18px;
+
+    border-radius: 8px;
+
+    border: 2px solid #555;
+
+    background: #111;
+
+    color: white;
+
+    text-align: center;
+
+}
+
+
+/* LEVEL 10 - REACTION POTATO */
+
+.reaction-potato {
+
+    font-size: 100px;
+
+    cursor: pointer;
+
+    padding: 30px;
+
+}

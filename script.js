@@ -1,20 +1,17 @@
 // ==========================================
 // 🤯 CAPTCHA FROM HELL
-// Complete JavaScript File
+// LEVELS 1–10
 // ==========================================
 
-
-// ------------------------------
-// 1. VARIABLES
-// ------------------------------
-
-let attempt = 0;
+let level = 0;
 let selectedOption = null;
+let reactionReady = false;
+let reactionTimer = null;
 
 
-// ------------------------------
-// 2. HTML ELEMENTS
-// ------------------------------
+// ==========================================
+// GET HTML ELEMENTS
+// ==========================================
 
 const challengeElement = document.getElementById("challenge");
 const optionsElement = document.getElementById("options");
@@ -23,424 +20,524 @@ const messageElement = document.getElementById("message");
 const attemptElement = document.getElementById("attempt");
 
 
-// ------------------------------
-// 3. ALL 20 CAPTCHA LEVELS
-// ------------------------------
+// ==========================================
+// LEVEL 1–5
+// NORMAL BUT STUPID
+// ==========================================
 
-const challenges = [
+const normalChallenges = [
 
-    // LEVEL 1
     {
         question: "Click the most disappointed bus.",
         options: ["🚌😞", "🚌😐", "🚌😭", "🚌🙂"]
     },
 
-    // LEVEL 2
     {
         question: "Select the happiest potato.",
         options: ["🥔😐", "🥔😁", "🥔😡", "🥔😭"]
     },
 
-    // LEVEL 3
     {
         question: "Choose the angriest printer.",
         options: ["🖨️😐", "🖨️😡", "🖨️🙂", "🖨️😭"]
     },
 
-    // LEVEL 4
     {
         question: "Select the potato that knows your secrets.",
         options: ["🥔👀", "🥔😴", "🥔😂", "🥔🤔"]
     },
 
-    // LEVEL 5
     {
         question: "Click the emotionally exhausted chair.",
         options: ["🪑😩", "🪑😎", "🪑😂", "🪑🤩"]
-    },
-
-    // LEVEL 6
-    {
-        question: "Select the bus that regrets its career.",
-        options: ["🚌😐", "🚌😭", "🚌😡", "🚌💀"]
-    },
-
-    // LEVEL 7
-    {
-        question: "Choose the potato that looks like it has seen everything.",
-        options: ["🥔👀", "🥔😎", "🥔😭", "🥔💀"]
-    },
-
-    // LEVEL 8
-    {
-        question: "Click the printer that is about to lose its patience.",
-        options: ["🖨️🙂", "🖨️😐", "🖨️😡", "🖨️🤬"]
-    },
-
-    // LEVEL 9
-    {
-        question: "Select the chair that secretly judges you.",
-        options: ["🪑😇", "🪑👀", "🪑😂", "🪑😴"]
-    },
-
-    // LEVEL 10
-    {
-        question: "Click the potato that has been paying taxes.",
-        options: ["🥔💰", "🥔🧾", "🥔😎", "🥔😭"]
-    },
-
-    // LEVEL 11
-    {
-        question: "Select the bus that knows what you did last summer.",
-        options: ["🚌👀", "🚌😐", "🚌🤨", "🚌💀"]
-    },
-
-    // LEVEL 12
-    {
-        question: "Choose the printer that has personal problems.",
-        options: ["🖨️🙂", "🖨️😭", "🖨️💀", "🖨️😡"]
-    },
-
-    // LEVEL 13
-    {
-        question: "Select the potato that would be your best friend.",
-        options: ["🥔🤝", "🥔😎", "🥔😐", "🥔😭"]
-    },
-
-    // LEVEL 14
-    {
-        question: "Select the potato that has the most suspicious financial history.",
-        options: ["🥔💰", "🥔🤑", "🥔😐", "🥔💸"]
-    },
-
-    // LEVEL 15
-    {
-        question: "Click the chair that has been waiting for you since 2007.",
-        options: ["🪑😴", "🪑😭", "🪑😡", "🪑👀"]
-    },
-
-    // LEVEL 16
-    {
-        question: "Select the bus that secretly wants to become a train.",
-        options: ["🚌🚂", "🚌😔", "🚌🚆", "🚌😭"]
-    },
-
-    // LEVEL 17
-    {
-        question: "Choose the printer that has personally betrayed you.",
-        options: ["🖨️😇", "🖨️😡", "🖨️💀", "🖨️😭"]
-    },
-
-    // LEVEL 18
-    {
-        question: "Select the potato that would survive a job interview.",
-        options: ["🥔😎", "🥔😰", "🥔💀", "🥔🤨"]
-    },
-
-    // LEVEL 19
-    {
-        question: "Click the object that has absolutely no idea why it is here.",
-        options: ["🪑❓", "🥔❓", "🚌❓", "🖨️❓"]
-    },
-
-    // LEVEL 20
-    {
-        question: "PROVE THAT YOU ARE NOT A POTATO.",
-        options: ["🥔", "🥔", "🥔", "🥔"]
     }
 
 ];
 
 
-// ------------------------------
-// 4. FUNNY FAILURE MESSAGES
-// ------------------------------
+// ==========================================
+// LOAD CURRENT LEVEL
+// ==========================================
 
-const messages = [
+function loadLevel() {
 
-    "❌ Verification failed. Try again.",
-
-    "❌ Nice try. You're still suspicious.",
-
-    "❌ The CAPTCHA doesn't believe you.",
-
-    "❌ Your humanity is questionable.",
-
-    "❌ Incorrect. Even the potato knows better.",
-
-    "❌ A committee of potatoes has rejected your application.",
-
-    "❌ Humanity verification denied.",
-
-    "❌ You are getting worse at being human.",
-
-    "❌ We have discussed your case. The answer is NO.",
-
-    "❌ Your behavior has been reported to the chairs.",
-
-    "❌ The bus refuses to cooperate with you.",
-
-    "❌ The printer has lost trust in you.",
-
-    "❌ Please try being more human.",
-
-    "❌ Suspicious potato activity detected.",
-
-    "❌ We have serious concerns about your humanity."
-
-];
-
-
-// ------------------------------
-// 5. LOAD A CAPTCHA LEVEL
-// ------------------------------
-
-function loadChallenge() {
-
-    // Get the current level
-    const challenge = challenges[attempt];
-
-    // Change the question
-    challengeElement.textContent =
-        `LEVEL ${attempt + 1}: ${challenge.question}`;
-
-    // Clear previous options
-    optionsElement.innerHTML = "";
-
-    // Reset selected option
     selectedOption = null;
+    reactionReady = false;
+
+    optionsElement.innerHTML = "";
+    messageElement.textContent = "";
+
+    // ======================================
+    // LEVELS 1–5
+    // ======================================
+
+    if (level < 5) {
+
+        const challenge = normalChallenges[level];
+
+        challengeElement.textContent =
+            `LEVEL ${level + 1}: ${challenge.question}`;
+
+        challenge.options.forEach(function(option) {
+
+            const optionElement =
+                document.createElement("div");
+
+            optionElement.classList.add("option");
+
+            optionElement.textContent = option;
+
+            optionElement.addEventListener("click", function() {
+
+                document
+                    .querySelectorAll(".option")
+                    .forEach(function(item) {
+
+                        item.classList.remove("selected");
+
+                    });
+
+                optionElement.classList.add("selected");
+
+                selectedOption = option;
+
+            });
+
+            optionsElement.appendChild(optionElement);
+
+        });
+
+        verifyButton.textContent = "VERIFY HUMAN";
+
+    }
 
 
-    // Create each option
-    challenge.options.forEach(function(option) {
+    // ======================================
+    // LEVEL 6
+    // MOVING BUS
+    // ======================================
 
-        const optionElement =
+    else if (level === 5) {
+
+        challengeElement.textContent =
+            "LEVEL 6: Click the bus that is trying to escape.";
+
+        const bus = document.createElement("div");
+
+        bus.textContent = "🚌";
+
+        bus.classList.add("moving-bus");
+
+        optionsElement.appendChild(bus);
+
+        bus.addEventListener("click", function() {
+
+            messageElement.textContent =
+                "😂 You caught the bus! Unfortunately, that was suspicious.";
+
+            selectedOption = "bus";
+
+            bus.style.position = "static";
+
+        });
+
+        verifyButton.textContent = "VERIFY HUMAN";
+
+    }
+
+
+    // ======================================
+    // LEVEL 7
+    // FAKE HUMANITY SCAN
+    // ======================================
+
+    else if (level === 6) {
+
+        challengeElement.textContent =
+            "LEVEL 7: Allow us to analyze your humanity.";
+
+        const scanBox =
             document.createElement("div");
 
-        optionElement.classList.add("option");
+        scanBox.classList.add("scan-box");
 
-        optionElement.textContent = option;
+        scanBox.innerHTML =
+            "🔍 READY TO SCAN HUMANITY";
 
+        optionsElement.appendChild(scanBox);
 
-        // When user clicks an option
-        optionElement.addEventListener("click", function() {
+        selectedOption = "scan";
 
-            // Remove selection from all options
-            document
-                .querySelectorAll(".option")
-                .forEach(function(item) {
+        verifyButton.textContent =
+            "START HUMANITY SCAN";
 
-                    item.classList.remove("selected");
-
-                });
+    }
 
 
-            // Select this option
-            optionElement.classList.add("selected");
+    // ======================================
+    // LEVEL 8
+    // DON'T CLICK THE POTATO
+    // ======================================
 
-            selectedOption = option;
+    else if (level === 7) {
+
+        challengeElement.textContent =
+            "LEVEL 8: DO NOT CLICK THE POTATO.";
+
+        const instruction =
+            document.createElement("p");
+
+        instruction.textContent =
+            "Seriously. Do NOT click it.";
+
+        instruction.style.marginBottom = "20px";
+
+        optionsElement.appendChild(instruction);
+
+
+        const potato =
+            document.createElement("div");
+
+        potato.textContent = "🥔";
+
+        potato.classList.add("big-potato");
+
+        optionsElement.appendChild(potato);
+
+
+        potato.addEventListener("click", function() {
+
+            messageElement.textContent =
+                "😐 YOU CLICKED THE POTATO. I LITERALLY TOLD YOU NOT TO.";
+
+            selectedOption = "potato";
 
         });
 
 
-        // Add option to page
-        optionsElement.appendChild(optionElement);
+        verifyButton.textContent =
+            "I DIDN'T CLICK IT";
 
-    });
+    }
+
+
+    // ======================================
+    // LEVEL 9
+    // ANGRY PRINTER SOUND
+    // ======================================
+
+    else if (level === 8) {
+
+        challengeElement.textContent =
+            "LEVEL 9: Type the sound of an angry printer.";
+
+        const input =
+            document.createElement("input");
+
+        input.type = "text";
+
+        input.placeholder =
+            "Type the printer sound...";
+
+        input.classList.add("captcha-input");
+
+        optionsElement.appendChild(input);
+
+
+        input.addEventListener("input", function() {
+
+            selectedOption = input.value;
+
+        });
+
+
+        verifyButton.textContent =
+            "SUBMIT SOUND";
+
+    }
+
+
+    // ======================================
+    // LEVEL 10
+    // REACTION TEST
+    // ======================================
+
+    else if (level === 9) {
+
+        challengeElement.textContent =
+            "LEVEL 10: Click the potato when it becomes emotionally ready.";
+
+        const potato =
+            document.createElement("div");
+
+        potato.textContent = "🥔😐";
+
+        potato.classList.add("reaction-potato");
+
+        optionsElement.appendChild(potato);
+
+
+        let emotions = [
+            "🥔😐",
+            "🥔🙂",
+            "🥔😳",
+            "🥔😁",
+            "🥔😎"
+        ];
+
+        let index = 0;
+
+        const emotionTimer =
+            setInterval(function() {
+
+                if (level !== 9) {
+
+                    clearInterval(emotionTimer);
+
+                    return;
+                }
+
+                potato.textContent =
+                    emotions[index];
+
+                index++;
+
+                if (index >= emotions.length) {
+
+                    clearInterval(emotionTimer);
+
+                    reactionReady = true;
+
+                }
+
+            }, 800);
+
+
+        potato.addEventListener("click", function() {
+
+            if (reactionReady) {
+
+                selectedOption = "potato";
+
+                potato.textContent = "🥔🎉";
+
+                messageElement.textContent =
+                    "😱 YOU ACTUALLY TIMED IT CORRECTLY.";
+
+            } else {
+
+                messageElement.textContent =
+                    "😂 TOO EARLY. The potato wasn't emotionally ready.";
+
+            }
+
+        });
+
+
+        verifyButton.textContent =
+            "VERIFY HUMAN";
+
+    }
 
 }
 
 
-// ------------------------------
-// 6. VERIFY BUTTON
-// ------------------------------
+// ==========================================
+// VERIFY BUTTON
+// ==========================================
 
 verifyButton.addEventListener("click", function() {
 
-    // FINAL SCREEN → RESTART
-    if (attempt >= challenges.length) {
 
-        attempt = 0;
+    // ======================================
+    // LEVEL 7 SPECIAL
+    // ======================================
 
-        attemptElement.textContent = "0";
-
-        verifyButton.textContent = "VERIFY HUMAN";
-
-        messageElement.textContent = "";
-
-        loadChallenge();
-
-        return;
-    }
-
-
-    // Nothing selected
-    if (selectedOption === null) {
+    if (level === 6) {
 
         messageElement.textContent =
-            "⚠️ You didn't even choose anything. Suspicious.";
+            "🔍 Scanning humanity...";
+
+        verifyButton.disabled = true;
+
+        setTimeout(function() {
+
+            messageElement.textContent =
+                "🧠 Checking brain activity...";
+
+        }, 1000);
+
+        setTimeout(function() {
+
+            messageElement.textContent =
+                "🥔 Consulting potato council...";
+
+        }, 2000);
+
+        setTimeout(function() {
+
+            messageElement.textContent =
+                "❌ POTATO COUNCIL HAS REJECTED YOU.";
+
+            verifyButton.disabled = false;
+
+            level++;
+
+            attemptElement.textContent = level;
+
+            setTimeout(loadLevel, 1200);
+
+        }, 3200);
 
         return;
     }
 
 
-    // Increase attempt
-    attempt++;
+    // ======================================
+    // LEVEL 8
+    // ======================================
 
-    attemptElement.textContent = attempt;
+    if (level === 7) {
 
+        level++;
 
-    // Check if all 20 levels are completed
-    if (attempt >= challenges.length) {
+        attemptElement.textContent = level;
 
-        challengeElement.textContent =
-            "🎉 FINAL RESULT";
+        messageElement.textContent =
+            "❌ You followed the instruction. That's suspicious.";
 
-        optionsElement.innerHTML = "";
-
-        messageElement.innerHTML =
-            "🎉 CONGRATULATIONS!<br><br>" +
-            "You have successfully failed all 20 CAPTCHA levels.<br><br>" +
-            "🏆 CERTIFIED HUMAN FAILURE™";
-
-        verifyButton.textContent = "TRY AGAIN";
+        setTimeout(loadLevel, 1200);
 
         return;
     }
 
 
-    // Random failure message
+    // ======================================
+    // NOTHING SELECTED
+    // ======================================
+
+    if (
+        selectedOption === null ||
+        selectedOption === ""
+    ) {
+
+        messageElement.textContent =
+            "⚠️ You didn't even do anything. Suspicious.";
+
+        return;
+
+    }
+
+
+    // ======================================
+    // LEVEL 9
+    // ======================================
+
+    if (level === 8) {
+
+        messageElement.textContent =
+            "❌ That is NOT how an angry printer sounds.";
+
+        level++;
+
+        attemptElement.textContent = level;
+
+        setTimeout(loadLevel, 1200);
+
+        return;
+
+    }
+
+
+    // ======================================
+    // LEVEL 10
+    // ======================================
+
+    if (level === 9) {
+
+        if (!reactionReady) {
+
+            messageElement.textContent =
+                "❌ You clicked too early. PATIENCE.";
+
+            return;
+
+        }
+
+        messageElement.textContent =
+            "❌ Correct timing detected. Unfortunately, this is suspicious.";
+
+        level++;
+
+        attemptElement.textContent = level;
+
+        setTimeout(showFinishedScreen, 1500);
+
+        return;
+
+    }
+
+
+    // ======================================
+    // LEVELS 1–6
+    // ======================================
+
+    level++;
+
+    attemptElement.textContent = level;
+
+    const funnyMessages = [
+
+        "❌ Verification failed. Try again.",
+
+        "❌ Nice try. You're still suspicious.",
+
+        "❌ The CAPTCHA doesn't believe you.",
+
+        "❌ Your humanity is questionable.",
+
+        "❌ Even the potato knows you're suspicious.",
+
+        "❌ Humanity verification denied."
+
+    ];
+
     const randomMessage =
-        messages[Math.floor(Math.random() * messages.length)];
+        funnyMessages[
+            Math.floor(Math.random() * funnyMessages.length)
+        ];
 
     messageElement.textContent = randomMessage;
 
 
-    // Special messages
-    if (attempt === 5) {
-
-        messageElement.textContent =
-            "😐 You've failed 5 times. This is becoming personal.";
-
-    }
-
-    if (attempt === 10) {
-
-        messageElement.textContent =
-            "🤨 10 attempts. We are beginning to question your existence.";
-
-    }
-
-    if (attempt === 15) {
-
-        messageElement.textContent =
-            "💀 15 attempts. Even the CAPTCHA feels sorry for you.";
-
-    }
-
-
-    // Load next level
-    loadChallenge();
+    setTimeout(loadLevel, 1000);
 
 });
 
 
-// ------------------------------
-// 9. TRY AGAIN BUTTON
-// ------------------------------
+// ==========================================
+// FINAL SCREEN AFTER LEVEL 10
+// ==========================================
 
-verifyButton.addEventListener("click", function() {
+function showFinishedScreen() {
 
-    // FINAL SCREEN → RESTART
-    if (attempt >= challenges.length) {
+    challengeElement.textContent =
+        "🔥 LEVEL 10 COMPLETED";
 
-        attempt = 0;
+    optionsElement.innerHTML = "";
 
-        attemptElement.textContent = "0";
+    messageElement.innerHTML =
+        "🎉 You survived the first 10 levels.<br><br>" +
+        "Unfortunately, you are still not verified.";
 
-        verifyButton.textContent = "VERIFY HUMAN";
+    verifyButton.textContent =
+        "CONTINUE TO HELL";
 
-        messageElement.textContent = "";
-
-        loadChallenge();
-
-        return;
-    }
+}
 
 
-    // Nothing selected
-    if (selectedOption === null) {
+// ==========================================
+// START
+// ==========================================
 
-        messageElement.textContent =
-            "⚠️ You didn't even choose anything. Suspicious.";
-
-        return;
-    }
-
-
-    // Increase attempt
-    attempt++;
-
-    attemptElement.textContent = attempt;
-
-
-    // Check if all 20 levels are completed
-    if (attempt >= challenges.length) {
-
-        challengeElement.textContent =
-            "🎉 FINAL RESULT";
-
-        optionsElement.innerHTML = "";
-
-        messageElement.innerHTML =
-            "🎉 CONGRATULATIONS!<br><br>" +
-            "You have successfully failed all 20 CAPTCHA levels.<br><br>" +
-            "🏆 CERTIFIED HUMAN FAILURE™";
-
-        verifyButton.textContent = "TRY AGAIN";
-
-        return;
-    }
-
-
-    // Random failure message
-    const randomMessage =
-        messages[Math.floor(Math.random() * messages.length)];
-
-    messageElement.textContent = randomMessage;
-
-
-    // Special messages
-    if (attempt === 5) {
-
-        messageElement.textContent =
-            "😐 You've failed 5 times. This is becoming personal.";
-
-    }
-
-    if (attempt === 10) {
-
-        messageElement.textContent =
-            "🤨 10 attempts. We are beginning to question your existence.";
-
-    }
-
-    if (attempt === 15) {
-
-        messageElement.textContent =
-            "💀 15 attempts. Even the CAPTCHA feels sorry for you.";
-
-    }
-
-
-    // Load next level
-    loadChallenge();
-
-});
-
-
-// ------------------------------
-// 10. START THE CAPTCHA
-// ------------------------------
-
-loadChallenge();
+loadLevel();
