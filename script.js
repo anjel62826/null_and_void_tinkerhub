@@ -40,7 +40,7 @@ function loadChallenge() {
         challenges[attempt % challenges.length];
 
     challengeElement.textContent =
-        challenge.question;
+    `LEVEL ${attempt + 1}: ${challenge.question}`;
 
     optionsElement.innerHTML = "";
 
@@ -125,13 +125,37 @@ if (attempt < 5) {
 
 }
 
-Click the happiest potato.
-Click the bus that looks like it missed its stop.
-Select the chair that has the most emotional damage.
-Choose the printer that owes you money.
-Select the potato that your mother would trust.
-Click the bus that knows what you did last summer.
-Select the chair that has seen your browser history.
-Type the sound of a disappointed calculator.
-Identify which potato has been paying taxes.
-Prove that you are not secretly a potato.
+{
+    question: "Level 14: Select the potato that has the most suspicious financial history.",
+    options: ["🥔💰", "🥔🤑", "🥔😐", "🥔💸"]
+},
+
+{
+    question: "Level 15: Click the chair that has been waiting for you since 2007.",
+    options: ["🪑😴", "🪑😭", "🪑😡", "🪑👀"]
+},
+
+{
+    question: "Level 16: Select the bus that secretly wants to become a train.",
+    options: ["🚌🚂", "🚌😔", "🚌🚆", "🚌😭"]
+},
+
+{
+    question: "Level 17: Choose the printer that has personally betrayed you.",
+    options: ["🖨️😇", "🖨️😡", "🖨️💀", "🖨️😭"]
+},
+
+{
+    question: "Level 18: Select the potato that would survive a job interview.",
+    options: ["🥔😎", "🥔😰", "🥔💀", "🥔🤨"]
+},
+
+{
+    question: "Level 19: Click the object that has absolutely no idea why it is here.",
+    options: ["🪑❓", "🥔❓", "🚌❓", "🖨️❓"]
+},
+
+{
+    question: "Level 20: PROVE THAT YOU ARE NOT A POTATO.",
+    options: ["🥔", "🥔", "🥔", "🥔"]
+}
