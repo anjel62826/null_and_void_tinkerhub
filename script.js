@@ -257,8 +257,24 @@ function loadChallenge() {
 
 verifyButton.addEventListener("click", function() {
 
+    // FINAL SCREEN → RESTART
+    if (attempt >= challenges.length) {
 
-    // If nothing is selected
+        attempt = 0;
+
+        attemptElement.textContent = "0";
+
+        verifyButton.textContent = "VERIFY HUMAN";
+
+        messageElement.textContent = "";
+
+        loadChallenge();
+
+        return;
+    }
+
+
+    // Nothing selected
     if (selectedOption === null) {
 
         messageElement.textContent =
@@ -271,24 +287,10 @@ verifyButton.addEventListener("click", function() {
     // Increase attempt
     attempt++;
 
-
-    // Update attempt counter
     attemptElement.textContent = attempt;
 
 
-    // Pick a random funny message
-    const randomMessage =
-        messages[Math.floor(Math.random() * messages.length)];
-
-
-    // Display message
-    messageElement.textContent = randomMessage;
-
-
-    // ------------------------------
-    // 7. CHECK IF ALL LEVELS ARE DONE
-    // ------------------------------
-
+    // Check if all 20 levels are completed
     if (attempt >= challenges.length) {
 
         challengeElement.textContent =
@@ -301,17 +303,20 @@ verifyButton.addEventListener("click", function() {
             "You have successfully failed all 20 CAPTCHA levels.<br><br>" +
             "🏆 CERTIFIED HUMAN FAILURE™";
 
-        verifyButton.textContent =
-            "TRY AGAIN";
+        verifyButton.textContent = "TRY AGAIN";
 
         return;
     }
 
 
-    // ------------------------------
-    // 8. SPECIAL MESSAGES FOR LEVELS
-    // ------------------------------
+    // Random failure message
+    const randomMessage =
+        messages[Math.floor(Math.random() * messages.length)];
 
+    messageElement.textContent = randomMessage;
+
+
+    // Special messages
     if (attempt === 5) {
 
         messageElement.textContent =
@@ -334,7 +339,7 @@ verifyButton.addEventListener("click", function() {
     }
 
 
-    // Load the next challenge
+    // Load next level
     loadChallenge();
 
 });
@@ -346,21 +351,90 @@ verifyButton.addEventListener("click", function() {
 
 verifyButton.addEventListener("click", function() {
 
+    // FINAL SCREEN → RESTART
     if (attempt >= challenges.length) {
 
         attempt = 0;
 
-        attemptElement.textContent = attempt;
+        attemptElement.textContent = "0";
 
-        verifyButton.textContent =
-            "VERIFY HUMAN";
+        verifyButton.textContent = "VERIFY HUMAN";
 
-        messageElement.textContent =
-            "";
+        messageElement.textContent = "";
 
         loadChallenge();
 
+        return;
     }
+
+
+    // Nothing selected
+    if (selectedOption === null) {
+
+        messageElement.textContent =
+            "⚠️ You didn't even choose anything. Suspicious.";
+
+        return;
+    }
+
+
+    // Increase attempt
+    attempt++;
+
+    attemptElement.textContent = attempt;
+
+
+    // Check if all 20 levels are completed
+    if (attempt >= challenges.length) {
+
+        challengeElement.textContent =
+            "🎉 FINAL RESULT";
+
+        optionsElement.innerHTML = "";
+
+        messageElement.innerHTML =
+            "🎉 CONGRATULATIONS!<br><br>" +
+            "You have successfully failed all 20 CAPTCHA levels.<br><br>" +
+            "🏆 CERTIFIED HUMAN FAILURE™";
+
+        verifyButton.textContent = "TRY AGAIN";
+
+        return;
+    }
+
+
+    // Random failure message
+    const randomMessage =
+        messages[Math.floor(Math.random() * messages.length)];
+
+    messageElement.textContent = randomMessage;
+
+
+    // Special messages
+    if (attempt === 5) {
+
+        messageElement.textContent =
+            "😐 You've failed 5 times. This is becoming personal.";
+
+    }
+
+    if (attempt === 10) {
+
+        messageElement.textContent =
+            "🤨 10 attempts. We are beginning to question your existence.";
+
+    }
+
+    if (attempt === 15) {
+
+        messageElement.textContent =
+            "💀 15 attempts. Even the CAPTCHA feels sorry for you.";
+
+    }
+
+
+    // Load next level
+    loadChallenge();
 
 });
 
